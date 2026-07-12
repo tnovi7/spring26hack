@@ -27,7 +27,7 @@ const STORAGE = {
     ledger: 'spring26hack_ledger',
     sos: 'spring26hack_sos',
 };
-const impeachmentTarget = 10;
+const impeachmentTarget = 3;
 
 function readStorage(key, fallback) {
     try {

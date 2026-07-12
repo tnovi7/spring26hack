@@ -1,3 +1,25 @@
+// NOTE: In production, never expose secret keys in frontend JS!
+const TEACHER_SECRET_KEY = 'spring26hack-super-secret-captain-key';
+
+function encryptRollNumber(rollNumber) {
+    if (!rollNumber) return '';
+    // Encrypts the roll number and formats it as a URL-safe Base64 string
+    const ciphertext = CryptoJS.AES.encrypt(rollNumber, TEACHER_SECRET_KEY).toString();
+    return `Anon-${ciphertext}`;
+}
+
+function decryptRollNumber(anonId) {
+    try {
+        // Strip the 'Anon-' prefix before decrypting
+        const cleanCiphertext = anonId.replace(/^Anon-/, '');
+        const bytes = CryptoJS.AES.decrypt(cleanCiphertext, TEACHER_SECRET_KEY);
+        const originalRoll = bytes.toString(CryptoJS.enc.Utf8);
+        return originalRoll || 'Decryption failed (Invalid Key)';
+    } catch (error) {
+        return 'Decryption failed (Corrupted Data)';
+    }
+}
+
 const STORAGE = {
     student: 'spring26hack_student',
     complaints: 'spring26hack_complaints',
@@ -44,15 +66,19 @@ function setupLoginPage() {
     if (!form) return;
     const roll = document.querySelector('#roll-number');
     const nameInput = document.querySelector('#roll-name');
+    
+    // Updated: Generates the AES encrypted string as the user types
     roll.addEventListener('input', () => {
         const val = roll.value.trim();
-        nameInput.value = val ? `Anon-${val.slice(-4)}` : '';
+        nameInput.value = val ? encryptRollNumber(val) : '';
     });
+
+    // Updated: Saves the AES encrypted string into local storage upon submission
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const rollNumber = roll.value.trim();
         if (!rollNumber) return;
-        const student = {roll: rollNumber, name: `Anon-${rollNumber.slice(-4)}`};
+        const student = {roll: rollNumber, name: encryptRollNumber(rollNumber)};
         writeStorage(STORAGE.student, student);
         window.location.href = '/dashboard/';
     });

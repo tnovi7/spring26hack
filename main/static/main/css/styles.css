@@ -67,6 +67,7 @@ body {
 .row-card h3 {margin:0 0 1rem; font-size:1.05rem; letter-spacing:.04em;}
 .row-actions {display:flex; justify-content:space-between; gap:.75rem; margin-top:.75rem;}
 .row-actions button {flex:1;}
+.red {background-color: var(--danger); color: var(--text);}
 .footer {padding:1rem 2rem; color:var(--muted); font-size:.9rem; text-align:center;}
 @media (max-width: 820px) {
     .nav-links {justify-content:center;}

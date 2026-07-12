@@ -11,7 +11,7 @@ urlpatterns = [
     path('ledger/', views.ledger, name='ledger'),
     path('sos/', views.sos, name='sos'),
     path('rules/', views.rules, name='rules'),
-    path('captain/<int:level>/', views.captain_dashboard, name='captain_dashboard'),
+    path('captain/', views.captain_dashboard, name='captain_dashboard'),
     path('service-worker.js', views.service_worker, name='service-worker'),
     path('supabase/status/', views.supabase_status, name='supabase-status'),
 ]

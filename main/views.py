@@ -33,11 +33,10 @@ def sos(request):
 def rules(request):
     return render(request, 'main/rules.html', {**TEMPLATE_CONTEXT, 'page_title': 'Rule Search'})
 
-def captain_dashboard(request, level):
+def captain_dashboard(request):
     return render(request, 'main/captain_dashboard.html', {
         **TEMPLATE_CONTEXT,
-        'page_title': f'Captain Dashboard {level}',
-        'captain_level': level,
+        'page_title': 'Captain Dashboard',
     })
 
 def service_worker(request):

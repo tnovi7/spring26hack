@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel sos-panel">
+    <h1>Emergency SOS</h1>
+    <p>Trigger an alert and help the second and third captains track danger zones.</p>
+    <form id="sos-form" class="card-form">
+        <label for="sos-location">Your current location</label>
+        <select id="sos-location" required>
+            <option value="Library">Library</option>
+            <option value="Corridor">Corridor</option>
+            <option value="Playground">Playground</option>
+            <option value="Classroom">Classroom</option>
+            <option value="Canteen">Canteen</option>
+        </select>
+        <button type="submit" class="panic-button">Panic Alert</button>
+    </form>
+    <div class="alert-log">
+        <h2>Past SOS alerts</h2>
+        <div id="sos-history" class="ticker-feed"></div>
+    </div>
+</section>
+{% endblock %}

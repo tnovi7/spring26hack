@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel form-panel">
+    <h1>AI Syllabus Transformer</h1>
+    <p>Paste a long syllabus and get a structured, bullet-point summary.</p>
+    <form id="ai-form" class="card-form">
+        <label for="syllabus-input">Syllabus</label>
+        <textarea id="syllabus-input" rows="8" placeholder="Paste the syllabus here"></textarea>
+        <button type="submit" class="primary-button">Summarize</button>
+    </form>
+    <div class="result-card">
+        <h2>Short structured syllabus</h2>
+        <div id="ai-output" class="result-output">Your summary will appear here.</div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{
+  "name": "Spring26Hack Hub",
+  "short_name": "Spring26Hack",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#041e28",
+  "theme_color": "#29f7ff",
+  "scope": "/",
+  "description": "Dark theme student dashboard PWA with offline support for complaints, seat plan, SOS, and rule search.",
+  "icons": []
+}

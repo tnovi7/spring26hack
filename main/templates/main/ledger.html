@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel ledger-panel">
+    <div class="hero">
+        <h1>Corruption Ledger</h1>
+        <p>Log forced payments and stolen food items anonymously.</p>
+    </div>
+    <form id="ledger-form" class="card-form">
+        <label for="ledger-type">Incident type</label>
+        <select id="ledger-type" required>
+            <option value="cash">Forced payment</option>
+            <option value="item">Stolen item</option>
+        </select>
+        <label for="ledger-amount">Amount / item count</label>
+        <input id="ledger-amount" type="number" min="1" value="1" required>
+        <label for="ledger-description">Description</label>
+        <textarea id="ledger-description" rows="4" placeholder="Brief note"></textarea>
+        <button type="submit" class="primary-button">Log Incident</button>
+    </form>
+    <div class="ledger-summary">
+        <div class="status-card small-card">
+            <h3>Total cash extorted</h3>
+            <strong id="total-cash">0</strong>
+        </div>
+        <div class="status-card small-card">
+            <h3>Total items stolen</h3>
+            <strong id="total-items">0</strong>
+        </div>
+    </div>
+    <div class="ticker-panel">
+        <h2>Live receipt feed</h2>
+        <div id="ledger-feed" class="ticker-feed"></div>
+    </div>
+    <div class="heatmap-panel">
+        <h2>Corruption intensity (30 days)</h2>
+        <div id="heatmap-grid" class="heatmap-grid"></div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel form-panel">
+    <h1>Complaint Portal</h1>
+    <p>Submit a complaint anonymously and help hold the captain accountable.</p>
+    <form id="complaint-form" class="card-form">
+        <label for="complaint-category">Category</label>
+        <select id="complaint-category" required>
+            <option value="forced payment">Forced payment</option>
+            <option value="stolen food">Stolen tiffin / food</option>
+            <option value="harassment">Harassment</option>
+            <option value="rule violation">Rule violation</option>
+            <option value="other">Other</option>
+        </select>
+        <label for="complaint-text">Details</label>
+        <textarea id="complaint-text" rows="5" placeholder="Describe the incident"></textarea>
+        <button type="submit" class="primary-button">Submit Complaint</button>
+    </form>
+    <div class="case-summary">
+        <h2>Complaint status</h2>
+        <div class="status-row">
+            <span>Submitted</span><strong id="complaint-count">0</strong>
+        </div>
+        <div class="status-row">
+            <span>Left to impeach captain</span><strong id="complaint-left">8</strong>
+        </div>
+    </div>
+</section>
+{% endblock %}

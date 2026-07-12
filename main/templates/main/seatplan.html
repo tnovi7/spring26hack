@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel form-panel">
+    <h1>Seat Plan Generator</h1>
+    <p>Add student rows and submit to build a height-sorted grid.</p>
+    <form id="seatplan-form" class="card-form">
+        <div id="seat-rows"></div>
+        <button id="add-row" type="button" class="secondary-button">Add Row</button>
+        <div class="form-actions">
+            <button type="submit" class="primary-button">Create Seating Grid</button>
+        </div>
+    </form>
+    <div id="seat-grid" class="seat-grid"></div>
+</section>
+{% endblock %}

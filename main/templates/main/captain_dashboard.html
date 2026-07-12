@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel captain-panel">
+    <div class="hero">
+        <h1>Captain {{ captain_level }} Dashboard</h1>
+        <p>Live distress ticker and alert history for recurring danger zones.</p>
+    </div>
+    <div class="ticker-panel">
+        <h2>Distress ticker</h2>
+        <div id="captain-ticker" class="ticker-feed"></div>
+    </div>
+    <div class="alert-log">
+        <h2>Past alerts</h2>
+        <div id="captain-alert-history" class="ticker-feed"></div>
+    </div>
+</section>
+{% endblock %}

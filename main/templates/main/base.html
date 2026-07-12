@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#033a4d">
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/main/css/styles.css">
+    <title>{{ page_title }} | Spring26Hack</title>
+</head>
+<body>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">Spring26Hack</div>
+            <nav class="nav-links">
+                <a href="/dashboard/">Dashboard</a>
+                <a href="/complaints/">Complaints</a>
+                <a href="/seatplan/">Seat Plan</a>
+                <a href="/ai/">AI</a>
+                <a href="/ledger/">Ledger</a>
+                <a href="/sos/">SOS</a>
+                <a href="/rules/">Rules</a>
+            </nav>
+            <button id="logout" class="ghost-button">Logout</button>
+        </header>
+
+        <main class="page-container">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <span>Offline-ready PWA · Dark aqua theme · Supabase-ready</span>
+        </footer>
+    </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+        }
+    </script>
+    <script src="/static/main/js/app.js"></script>
+</body>
+</html>

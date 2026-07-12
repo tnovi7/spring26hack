@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel centered-panel login-panel">
+    <h1>Student Login</h1>
+    <p>Enter your roll number to get an anonymous student identity.</p>
+    <form id="login-form" class="card-form">
+        <label for="roll-number">Roll Number</label>
+        <input id="roll-number" name="roll" type="text" placeholder="e.g. 202610012" required>
+        <label for="roll-name">Anonymous Name</label>
+        <input id="roll-name" name="name" type="text" readonly placeholder="Generated after submit">
+        <button type="submit" class="primary-button">Login</button>
+    </form>
+    <div class="hint">Your anonymous account is mapped to your roll number but the dashboard stays private.</div>
+</section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<section class="panel form-panel">
+    <h1>Rule Search</h1>
+    <p>Check whether the captain's claim is legitimate or made up.</p>
+    <form id="rules-form" class="card-form">
+        <label for="rule-claim">Captain claim</label>
+        <input id="rule-claim" type="text" placeholder="Enter a claim to verify" required>
+        <button type="submit" class="primary-button">Verify Claim</button>
+    </form>
+    <div class="result-card">
+        <h2>Verdict</h2>
+        <div id="rule-verdict" class="result-output">Type a claim and press Verify.</div>
+        <div id="rule-match" class="result-note"></div>
+    </div>
+</section>
+{% endblock %}

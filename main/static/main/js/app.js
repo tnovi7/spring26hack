@@ -66,7 +66,7 @@ function setupLoginPage() {
     if (!form) return;
     const roll = document.querySelector('#roll-number');
     const nameInput = document.querySelector('#roll-name');
-    
+
     // Updated: Generates the AES encrypted string as the user types
     roll.addEventListener('input', () => {
         const val = roll.value.trim();
@@ -78,7 +78,7 @@ function setupLoginPage() {
         event.preventDefault();
         const rollNumber = roll.value.trim();
         if (!rollNumber) return;
-        const student = {roll: rollNumber, name: encryptRollNumber(rollNumber)};
+        const student = { roll: rollNumber, name: encryptRollNumber(rollNumber) };
         writeStorage(STORAGE.student, student);
         window.location.href = '/dashboard/';
     });
@@ -120,7 +120,7 @@ function setupComplaintPage() {
         const category = document.querySelector('#complaint-category').value;
         const details = document.querySelector('#complaint-text').value.trim();
         const complaints = readStorage(STORAGE.complaints, []);
-        complaints.push({category, details, timestamp: new Date().toISOString()});
+        complaints.push({ category, details, timestamp: new Date().toISOString() });
         writeStorage(STORAGE.complaints, complaints);
         updateCounts();
         form.reset();
@@ -139,7 +139,7 @@ function createSeatRow(index, values) {
             <input type="text" name="roll" placeholder="Roll number" value="${values?.roll || ''}" required>
             <label>Height (cm)</label>
             <input type="number" name="height" min="100" placeholder="Height" value="${values?.height || ''}" required>
-            <label>Handicapped / disabled</label>
+            <label>Handicapped / Disabled</label>
             <select name="handicap">
                 <option value="false" ${values?.handicap === false ? 'selected' : ''}>No</option>
                 <option value="true" ${values?.handicap === true ? 'selected' : ''}>Yes</option>
@@ -175,7 +175,12 @@ function setupSeatplanPage() {
             handicap: row.querySelector('[name="handicap"]').value === 'true',
         })).filter((item) => item.name && item.roll && item.height);
         writeStorage(STORAGE.seatRows, rows);
-        const sorted = [...rows].sort((a, b) => a.height - b.height);
+        const sorted = [...rows].sort((a, b) => {
+            if (a.handicap !== b.handicap) {
+                return a.handicap ? -1 : 1;
+            }
+            return a.height - b.height;
+        });
         const cols = Math.min(6, Math.max(3, Math.ceil(sorted.length / 2)));
         grid.style.gridTemplateColumns = `repeat(${cols}, minmax(120px, 1fr))`;
         grid.innerHTML = '';
@@ -227,7 +232,7 @@ function updateLedgerSummary(entries) {
     const items = entries.filter((entry) => entry.type === 'item').reduce((acc, cur) => acc + (Number(cur.amount) || 0), 0);
     document.querySelector('#total-cash').textContent = `৳ ${cash}`;
     document.querySelector('#total-items').textContent = items;
-    return {cash, items};
+    return { cash, items };
 }
 
 function createLedgerEntryCard(entry) {
@@ -281,7 +286,7 @@ function setupLedgerPage() {
         const type = document.querySelector('#ledger-type').value;
         const amount = Number(document.querySelector('#ledger-amount').value) || 0;
         const description = document.querySelector('#ledger-description').value.trim();
-        const newEntry = {type, amount, description, timestamp: new Date().toISOString()};
+        const newEntry = { type, amount, description, timestamp: new Date().toISOString() };
         const updated = [...entries, newEntry];
         writeStorage(STORAGE.ledger, updated);
         renderEntries(updated);
@@ -313,7 +318,7 @@ function setupSOSPage() {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         const location = document.querySelector('#sos-location').value;
-        const alert = {location, note: `SOS from ${location}`, timestamp: new Date().toISOString()};
+        const alert = { location, note: `SOS from ${location}`, timestamp: new Date().toISOString() };
         const updated = [...alerts, alert];
         writeStorage(STORAGE.sos, updated);
         render(updated);
@@ -341,20 +346,20 @@ function renderCaptainPage() {
 }
 
 const KNOWN_RULES = [
-    {rule: 'Study hour is compulsory after 9 PM', keywords: ['study hour', 'compulsory', '9 PM']},
-    {rule: 'No one can leave class before the captain says so', keywords: ['leave class', 'captain says']},
-    {rule: 'All students must pay for their own tiffin', keywords: ['pay', 'tiffin', 'own']},
-    {rule: 'Library access is only allowed with a captain pass', keywords: ['library access', 'captain pass']},
-    {rule: 'Mobile phones are banned in corridors', keywords: ['mobile phones', 'corridors', 'banned']},
+    { rule: 'Study hour is compulsory after 9 PM', keywords: ['study hour', 'compulsory', '9 PM'] },
+    { rule: 'No one can leave class before the captain says so', keywords: ['leave class', 'captain says'] },
+    { rule: 'All students must pay for their own tiffin', keywords: ['pay', 'tiffin', 'own'] },
+    { rule: 'Library access is only allowed with a captain pass', keywords: ['library access', 'captain pass'] },
+    { rule: 'Mobile phones are banned in corridors', keywords: ['mobile phones', 'corridors', 'banned'] },
 ];
 
 function verifyClaim(claim) {
     const normalized = claim.toLowerCase();
     const match = KNOWN_RULES.find((entry) => entry.keywords.every((keyword) => normalized.includes(keyword)));
     if (match) {
-        return {verdict: 'Legit', match: match.rule};
+        return { verdict: 'Legit', match: match.rule };
     }
-    return {verdict: 'Made up', match: 'No matching rule found.'};
+    return { verdict: 'Made up', match: 'No matching rule found.' };
 }
 
 function setupRulesPage() {

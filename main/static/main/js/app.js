@@ -29,6 +29,14 @@ const STORAGE = {
 };
 const impeachmentTarget = 3;
 
+// Helper: read a cookie (used for Django CSRF token)
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
 function readStorage(key, fallback) {
     try {
         const raw = localStorage.getItem(key);
@@ -220,10 +228,45 @@ function setupAIPage() {
     if (!requireLogin()) return;
     const form = document.querySelector('#ai-form');
     const output = document.querySelector('#ai-output');
-    form.addEventListener('submit', (event) => {
+    const submitBtn = form.querySelector('button[type="submit"]');
+    
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const text = document.querySelector('#syllabus-input').value;
-        output.textContent = summarizeSyllabus(text);
+        const text = document.querySelector('#syllabus-input').value.trim();
+        
+        if (!text) {
+            output.textContent = 'Please enter a syllabus to summarize.';
+            return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Summarizing...';
+        output.textContent = 'Processing with Gemini AI...';
+        
+        try {
+            const csrftoken = getCookie('csrftoken');
+            const response = await fetch('/api/ai/summarize/', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken || ''
+                },
+                body: JSON.stringify({ syllabus: text }),
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                output.textContent = data.summary;
+            } else {
+                output.textContent = `Error: ${data.error || 'Unknown error'}`;
+            }
+        } catch (error) {
+            output.textContent = `Failed to summarize: ${error.message}`;
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Summarize';
+        }
     });
 }
 
@@ -345,13 +388,20 @@ function renderCaptainPage() {
     });
 }
 
-const KNOWN_RULES = [
-    { rule: 'Study hour is compulsory after 9 PM', keywords: ['study hour', 'compulsory', '9 PM'] },
-    { rule: 'No one can leave class before the captain says so', keywords: ['leave class', 'captain says'] },
-    { rule: 'All students must pay for their own tiffin', keywords: ['pay', 'tiffin', 'own'] },
-    { rule: 'Library access is only allowed with a captain pass', keywords: ['library access', 'captain pass'] },
-    { rule: 'Mobile phones are banned in corridors', keywords: ['mobile phones', 'corridors', 'banned'] },
-];
+let KNOWN_RULES = [];
+
+function loadRules() {
+    return fetch('/static/rules.json')
+        .then((response) => response.json())
+        .then((data) => {
+            KNOWN_RULES = data;
+            return KNOWN_RULES;
+        })
+        .catch((error) => {
+            console.error('Failed to load rules:', error);
+            return [];
+        });
+}
 
 function verifyClaim(claim) {
     const normalized = claim.toLowerCase();
@@ -387,7 +437,9 @@ function bootstrap() {
     if (window.location.pathname === '/ledger/') setupLedgerPage();
     if (window.location.pathname === '/sos/') setupSOSPage();
     if (window.location.pathname.startsWith('/captain/')) renderCaptainPage();
-    if (window.location.pathname === '/rules/') setupRulesPage();
+    if (window.location.pathname === '/rules/') {
+        loadRules().then(() => setupRulesPage());
+    }
 }
 
 document.addEventListener('DOMContentLoaded', bootstrap);

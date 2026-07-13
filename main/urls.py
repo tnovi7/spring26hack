@@ -8,6 +8,7 @@ urlpatterns = [
     path('complaints/', views.complaints, name='complaints'),
     path('seatplan/', views.seatplan, name='seatplan'),
     path('ai/', views.ai_tool, name='ai_tool'),
+    path('api/ai/summarize/', views.ai_summarize, name='ai_summarize'),
     path('ledger/', views.ledger, name='ledger'),
     path('sos/', views.sos, name='sos'),
     path('rules/', views.rules, name='rules'),

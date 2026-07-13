@@ -1,0 +1,22 @@
+[
+    {
+        "rule": "Study hour is compulsory after 9 PM",
+        "keywords": ["study hour", "compulsory", "9 PM"]
+    },
+    {
+        "rule": "No one can leave class before the captain says so",
+        "keywords": ["leave class", "captain says"]
+    },
+    {
+        "rule": "All students must pay for their own tiffin",
+        "keywords": ["pay", "tiffin", "own"]
+    },
+    {
+        "rule": "Library access is only allowed with a captain pass",
+        "keywords": ["library access", "captain pass"]
+    },
+    {
+        "rule": "Mobile phones are banned in corridors",
+        "keywords": ["mobile phones", "corridors", "banned"]
+    }
+]

@@ -1,8 +1,10 @@
 import json
+import os
 from pathlib import Path
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
 
 TEMPLATE_CONTEXT = {
     'supabase_url': settings.SUPABASE_URL,
@@ -55,3 +57,34 @@ def supabase_status(request):
         return JsonResponse({'connected': True, 'message': 'Supabase client ready.'})
     except Exception:
         return JsonResponse({'connected': False, 'message': 'Supabase client is available, but connection could not be verified.'})
+
+@require_http_methods(['POST'])
+def ai_summarize(request):
+    try:
+        data = json.loads(request.body)
+        syllabus = data.get('syllabus', '').strip()
+        if not syllabus:
+            return JsonResponse({'error': 'No syllabus provided'}, status=400)
+        
+        api_key = os.environ.get('GEMINI_API_KEY', '')
+        if not api_key:
+            return JsonResponse({'error': 'Gemini API key not configured'}, status=500)
+        
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-pro')
+        
+        prompt = f"""Transform the following syllabus into a short, structured summary with bullet-pointed topics. 
+Keep it concise and organized. Focus on key topics and learning outcomes.
+
+SYLLABUS:
+{syllabus}
+
+STRUCTURED SUMMARY:"""
+        
+        response = model.generate_content(prompt)
+        summary = response.text if response else 'No summary generated'
+        
+        return JsonResponse({'summary': summary})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

@@ -294,24 +294,28 @@ function setupLedgerPage() {
     const form = document.querySelector('#ledger-form');
     const feed = document.querySelector('#ledger-feed');
     const heatmap = document.querySelector('#heatmap-grid');
-    const entries = readStorage(STORAGE.ledger, []);
+    let entries = readStorage(STORAGE.ledger, []);
     const renderEntries = (list) => {
         feed.innerHTML = '';
         list.slice().reverse().forEach((entry) => feed.appendChild(createLedgerEntryCard(entry)));
     };
     const renderHeatmap = (list) => {
         const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         const counts = {};
-        for (let i = 0; i < 30; i += 1) {
-            const day = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
-            counts[day.toISOString().slice(0, 10)] = 0;
+        for (let day = 1; day <= daysInMonth; day += 1) {
+            const date = new Date(year, month, day);
+            counts[date.toISOString().slice(0, 10)] = 0;
         }
         list.forEach((entry) => {
             const date = new Date(entry.timestamp).toISOString().slice(0, 10);
-            if (counts[date] !== undefined) counts[date] += entry.type === 'cash' ? 1 : 1;
+            const amount = Number(entry.amount) || 1;
+            if (counts[date] !== undefined) counts[date] += amount;
         });
         heatmap.innerHTML = '';
-        Object.keys(counts).reverse().forEach((date) => {
+        Object.keys(counts).forEach((date) => {
             const count = counts[date];
             const level = Math.min(5, Math.ceil(count / 2));
             const cell = document.createElement('div');
@@ -330,11 +334,11 @@ function setupLedgerPage() {
         const amount = Number(document.querySelector('#ledger-amount').value) || 0;
         const description = document.querySelector('#ledger-description').value.trim();
         const newEntry = { type, amount, description, timestamp: new Date().toISOString() };
-        const updated = [...entries, newEntry];
-        writeStorage(STORAGE.ledger, updated);
-        renderEntries(updated);
-        updateLedgerSummary(updated);
-        renderHeatmap(updated);
+        entries = [...readStorage(STORAGE.ledger, []), newEntry];
+        writeStorage(STORAGE.ledger, entries);
+        renderEntries(entries);
+        updateLedgerSummary(entries);
+        renderHeatmap(entries);
         form.reset();
     });
 }

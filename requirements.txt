@@ -7,6 +7,8 @@ charset-normalizer==3.4.9
 cryptography==49.0.0
 deprecation==2.1.0
 Django==6.0.7
+gunicorn==23.0.0
+whitenoise==6.8.2
 google-ai-generativelanguage==0.6.15
 google-api-core==2.25.2
 google-api-python-client==2.198.0
